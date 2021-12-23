@@ -7,6 +7,7 @@ pipeline {
 
             steps {
                 echo 'Building the application ...'
+                echo 'Polling built ...'
                 script {
                     def test = 2 + 2 > 4 ? 'cool' : 'not cool'
                     println test
