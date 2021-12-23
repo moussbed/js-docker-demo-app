@@ -11,6 +11,9 @@ pipeline {
                     def test = 2 + 2 > 4 ? 'cool' : 'not cool'
                     println test
                 }
+                nodejs('Node-10.17'){
+                   sh 'yarn install'
+                }
             }
         }
 
