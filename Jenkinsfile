@@ -1,3 +1,4 @@
+CODE_CHANGES = getGitChanges()
 pipeline {
     agent any
 
@@ -5,6 +6,12 @@ pipeline {
 
         stage("build") {
 
+            when {
+                expression{
+                    CODE_CHANGES == true
+                }
+            }
+            // This steps will run if the code has changed'
             steps {
                 echo 'Building the application ...'
                 script {
@@ -18,7 +25,13 @@ pipeline {
         }
 
         stage("test") {
-
+            
+            when {
+                expression{
+                    BRANCH_NAME == 'dev'
+                }
+            }
+            // This steps will run if if the branch is 'dev'
             steps {
                 echo 'Testing the application ...'
                
