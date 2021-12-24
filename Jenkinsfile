@@ -10,8 +10,17 @@
 // Other tools like YARN, NPM must be installed in the Plugins management sidebar on jenkins GUI before using them.
 // Notice: Before using build tool you need to enable it in the Global tool configuration sidebar on jenkins GUI
 
+// -------------------------PARAMETERS -----------------------------------------
+// Parameters are used to assign values or choices to configure the pipeline execution externally
+
 pipeline {
     agent any
+
+    parameters {
+       // string(name : 'VERSION', defaultValue: '' , description: 'version to deploy on prod')
+        choice(name : 'VERSION', choices: ['1.1.0','1.1.1','1.1.2'] , description: 'version to deploy on prod')
+        booleanParam(name: 'executeTests', defaultValue: true , description: "Doesn't skip tests by default")
+    }
 
     tools {
        // This version is picked in the Global tool configuration sidebar on jenkins GUI after configuration
@@ -45,7 +54,13 @@ pipeline {
         }
 
         stage("test") {
-            
+
+            when {
+                expression {
+                    params.executeTests
+                }
+            }
+            // This steps will run if params.executeTests is true
             steps {
                 echo 'Testing the application ...'
                
@@ -63,6 +78,7 @@ pipeline {
 
             steps {
                 echo 'Deploying the application ...'
+                echo "Deploying version  ${params.VERSION}"
                 echo "Deploying with ${SERVER_CREDENTIALS}"
 
                 // We can get credentials where we need them whithout declaring them in the environment section
