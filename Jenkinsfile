@@ -34,13 +34,20 @@ pipeline {
 
     stages {
 
+        stage("Init") {
+             steps {
+                 script {
+                     gv = load "script.groovy"
+                 }
+             }
+        }
+
         stage("build") {
 
             steps {
-                echo 'Building the application ...'
-                echo "Building version ${NEW_VERSION} ..."
 
                 script {
+                    gv.buildApp()
                     def test = 2 + 2 > 4 ? 'cool' : 'not cool'
                     println test
                 }
@@ -62,8 +69,9 @@ pipeline {
             }
             // This steps will run if params.executeTests is true
             steps {
-                echo 'Testing the application ...'
-               
+                script{
+                    gv.testApp()  
+                }
             }
         }
 
@@ -77,10 +85,9 @@ pipeline {
             // This steps will run if if the branch is 'dev'
 
             steps {
-                echo 'Deploying the application ...'
-                echo "Deploying version  ${params.VERSION}"
-                echo "Deploying with ${SERVER_CREDENTIALS}"
-
+                script{
+                    gv.deployApp()
+                }
                 // We can get credentials where we need them whithout declaring them in the environment section
                 withCredentials([ usernamePassword(credentials : 'server-credentials', usernameVariable: USER, passwordVariable: PWD) ]){
                         
