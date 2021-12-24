@@ -1,4 +1,3 @@
-CODE_CHANGES = getGitChanges()
 pipeline {
     agent any
 
@@ -8,7 +7,7 @@ pipeline {
 
             when {
                 expression{
-                    CODE_CHANGES == true
+                    env.CODE_CHANGES == true
                 }
             }
             // This steps will run if the code has changed'
