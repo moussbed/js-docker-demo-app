@@ -5,12 +5,6 @@ pipeline {
 
         stage("build") {
 
-            when {
-                expression{
-                    env.CODE_CHANGES == true
-                }
-            }
-            // This steps will run if the code has changed'
             steps {
                 echo 'Building the application ...'
                 script {
@@ -25,12 +19,6 @@ pipeline {
 
         stage("test") {
             
-            when {
-                expression{
-                    BRANCH_NAME == 'dev'
-                }
-            }
-            // This steps will run if if the branch is 'dev'
             steps {
                 echo 'Testing the application ...'
                
@@ -38,6 +26,13 @@ pipeline {
         }
 
         stage("deploy") {
+
+             when {
+                expression{
+                    BRANCH_NAME == 'main'
+                }
+            }
+            // This steps will run if if the branch is 'dev'
 
             steps {
                 echo 'Deploying the application ...'
