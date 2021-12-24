@@ -34,5 +34,17 @@ pipeline {
         }
 
     }
+    // Execute some logic after all stages executed
+    post {
+        always {
+           sh 'Always executed after all stages executed'
+        }
+        success {
+           sh 'Executed except if all stages are completed'
+        }
+        failure {
+           sh 'Executed unless an error triggered'
+        }
+    }
 
 }
